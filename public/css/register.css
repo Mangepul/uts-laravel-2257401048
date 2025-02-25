@@ -1,0 +1,102 @@
+/* Warna dan font dasar */
+body {
+    background-color: #f0f8ff;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Section Register */
+.register-section {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.register-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form Container */
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Mencegah elemen keluar dari container */
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Password Container */
+.password-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.password-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Ikon Hidden Password */
+.password-container .toggle-password {
+    position: absolute;
+    right: 10px; /* Jarak dari kanan */
+    top: 50%; /* Posisi vertikal di tengah */
+    transform: translateY(-50%); /* Menyesuaikan agar benar-benar di tengah */
+    cursor: pointer;
+    color: #666;
+    font-size: 18px; /* Ukuran ikon */
+    line-height: 1; /* Menghindari ikon tidak sejajar */
+}
+
+/* Tombol */
+.btn {
+    display: inline-block;
+    width: calc(48% - 5px); /* Membagi tombol menjadi dua bagian */
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #555;
+}
+
+/* Grup Tombol */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}

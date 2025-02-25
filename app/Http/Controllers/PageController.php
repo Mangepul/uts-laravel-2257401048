@@ -9,22 +9,12 @@ use App\Models\User;
 
 class PageController extends Controller
 {
-    public function __construct()
-    {
-        // Middleware sudah diatur di routes, jadi bisa dihapus dari constructor
-        // Atau bisa tetap dipakai sebagai alternative dari middleware di routes
-        $this->middleware('auth')->only(['home']);
-        $this->middleware('guest')->only(['login', 'register', 'registerSubmit', 'loginSubmit']);
-    }
-
     public function welcome()
     {
-        // Tambahkan pengecekan user yang sudah login
-        if (Auth::check()) {
-            return redirect()->route('home');
-        }
+
         return view('welcome');
     }
+
 
     public function register()
     {
@@ -68,7 +58,7 @@ class PageController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) { // Tambahkan remember me
             $request->session()->regenerate();
-            
+
             // Redirect ke intended URL jika ada
             return redirect()->intended(route('home'))
                 ->with('success', 'Login berhasil!');
@@ -83,8 +73,14 @@ class PageController extends Controller
 
     public function home()
     {
-        $user = auth()->user();
-        
+        $user = auth()->user(); // Ambil data user yang sedang login
+
+        // Pastikan data pengguna ada
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu');
+        }
+
+        // Kirim data pengguna ke halaman resort (home.blade.php)
         return view('home', [
             'nim' => $user->nim,
             'nama' => $user->nama,
@@ -92,13 +88,110 @@ class PageController extends Controller
         ]);
     }
 
+
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect()->route('welcome')  // Ubah ke welcome page
             ->with('success', 'Anda telah berhasil logout.');
+    }
+
+    public function booking($id)
+    {
+        // Pastikan user sudah login
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        // Contoh data kamar (ganti dengan query database)
+        $kamar = [
+            'id' => $id,
+            'nama' => 'Deluxe Room 101',
+            'harga' => 'Rp 1.000.000/malam',
+            'deskripsi' => 'Kamar dengan pemandangan taman dan fasilitas lengkap.'
+        ];
+
+        return view('booking', compact('kamar')); // Hanya kirim $kamar ke view
+    }
+
+    // Tambahan fungsi untuk profile
+    public function profile()
+    {
+        $user = auth()->user();
+
+        // Pastikan user sudah login
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu');
+        }
+
+        return view('profile', compact('user'));
+    }
+
+    public function editProfile()
+    {
+        $user = auth()->user();
+
+        // Pastikan user sudah login
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu');
+        }
+
+        return view('profile.edit', compact('user'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+
+        // Pastikan user sudah login
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu');
+        }
+
+        $validated = $request->validate([
+            'nim' => 'required|string|max:20|unique:users,nim,' . $user->id,
+            'nama' => 'required|string|max:255',
+            'kelas' => 'required|string|max:10',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        ]);
+    }
+
+    public function changePassword()
+    {
+        $user = auth()->user();
+
+        // Pastikan user sudah login
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu');
+        }
+
+        return view('profile.change-password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = auth()->user();
+
+        // Pastikan user sudah login
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu');
+        }
+
+        $validated = $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ]);
+
+        // Verifikasi password saat ini
+        if (!Hash::check($validated['current_password'], $user->password)) {
+            return back()->with('error', 'Password saat ini tidak cocok');
+        }
+
+
+        return redirect()->route('profile')
+            ->with('success', 'Password berhasil diubah');
     }
 }

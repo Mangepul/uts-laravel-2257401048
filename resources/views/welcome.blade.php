@@ -1,89 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Awal</title>
-    <style>
-        
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #1e90ff;
-            color: #fff;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+    <!DOCTYPE html>
+    <html lang="en">
 
-        .content-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 20px;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome to NGAWAG RESORT</title>
+        <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    </head>
 
-        h1 {
-            font-size: 2.5rem;
-            color: #f8f9fa;
-            margin-bottom: 20px;
-        }
+    <body>
+        <!-- Navbar -->
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="logo">
+                <img src="{{ asset('gambar/logo-ngawag.png') }}" alt="Logo NGAWAG">
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ route('welcome') }}">Home</a></li>
+                <li><a href="{{ route('about') }}">Tentang</a></li>
+                
+                @auth
+                    <!-- Menu yang hanya muncul jika user sudah login -->
+                    <li><a href="{{ route('home') }}">Resort</a></li>
+                    <li><a href="{{ route('profile') }}">My Profile</a></li>
+                    <li>
+                        <a href="{{ route('logout') }}" 
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </li>
+                @else
+                    <!-- Menu untuk user yang belum login -->
+                    <li><a href="{{ route('login') }}">Login</a></li>
+                @endauth
+            </ul>
+        </nav>
 
-        .button-container {
-            margin-top: 10px;
-        }
-
-        a {
-            display: inline-block;
-            margin: 10px;
-            padding: 12px 35px;
-            font-size: 1rem;
-            text-decoration: none;
-            color: #fff;
-            background: linear-gradient(135deg, #00bfff, #0056b3); 
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            border: none;
-        }
-
-        a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(135deg, #0056b3, #00bfff);
-        }
-
-        .watermark {
-            font-size: 0.9rem;
-            color: #f1f1f1;
-            font-style: italic;
-            opacity: 0.8;
-            text-align: center;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.1);
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-        }
-
-        .watermark:hover {
-            color: #fafafa;
-            opacity: 1;
-            transition: color 0.3s ease, opacity 0.3s ease;
-        }
-    </style>
-</head>
-<body>
-    <div class="content-wrapper">
-        <h1>SELAMAT DATANG</h1>
-        <div class="button-container">
-            <a href="{{ route('register') }}">Daftar</a>
-            <a href="{{ route('login') }}">Login</a>
+        <!-- Welcome Section -->
+        <div class="slider">
+            <div class="slides">
+                <img src="{{ asset('gambar/welcome1.jpg') }}" alt="Foto 1">
+                <img src="{{ asset('gambar/welcome2.jpg') }}" alt="Foto 2">
+                <img src="{{ asset('gambar/welcome3.jpg') }}" alt="Foto 3">
+            </div>
+            <div class="welcome-text">
+                <h1>SELAMAT DATANG DI NGAWAG RESORT</h1>
+                <p>Temukan kedamaian dan keindahan alam hanya di NGAWAG RESORT.</p>
+            </div>
         </div>
-    </div>
-    <div class="watermark">Created by Saefullah_MI22B_2257401048</div>
-</body>
-</html>
+
+        <!-- Additional Content -->
+        <div class="additional-content">
+            <h2>Kenapa Memilih NGAWAG Resort?</h2>
+            <p>NGAWAG Resort menawarkan pengalaman menginap yang luar biasa dengan pemandangan alam yang indah, fasilitas lengkap, dan layanan terbaik.</p>
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-swimming-pool"></i>
+                    <h3>Fasilitas Mewah</h3>
+                    <p>Kami menyediakan fasilitas kelas dunia untuk kenyamanan Anda.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-mountain"></i>
+                    <h3>Pemandangan Alam</h3>
+                    <p>Rasakan keindahan alam yang memukau langsung dari kamar Anda.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-concierge-bell"></i>
+                    <h3>Layanan Terbaik</h3>
+                    <p>Tim kami siap melayani Anda dengan sepenuh hati.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2025 NGAWAG Resort. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </footer>
+
+        <script>
+            // Automatic slider with smooth transition
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.slides img');
+            const totalSlides = slides.length;
+
+            setInterval(() => {
+                slides.forEach(slide => slide.style.opacity = "0");
+                slides[currentSlide].style.opacity = "1";
+                currentSlide = (currentSlide + 1) % totalSlides;
+            }, 3000);
+        </script>
+    </body>
+
+    </html>

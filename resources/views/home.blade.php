@@ -1,175 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #1e90ff;
-            color: #fff;
-            min-height: 100vh;
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #f8f9fa;
-            text-decoration: none;
-        }
-
-        .navbar-nav {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: #f8f9fa;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .logout-btn {
-            background: linear-gradient(135deg, #00bfff, #0056b3);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: linear-gradient(135deg, #0056b3, #00bfff);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 20px;
-        }
-
-        .welcome-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .card h3 {
-            margin-top: 0;
-            color: #f8f9fa;
-        }
-
-        .card p {
-            color: #e9ecef;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                padding: 1rem;
-            }
-
-            .navbar-nav {
-                margin-top: 1rem;
-                flex-direction: column;
-                width: 100%;
-                text-align: center;
-            }
-
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <title>Resort - NGAWAG RESORT</title>
+    <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/resort.css') }}">
 </head>
+
 <body>
+    <!-- Navbar -->
     <nav class="navbar">
-        <a href="#" class="navbar-brand">Dashboard Mahasiswa</a>
-        <div class="navbar-nav">
-            <a href="#" class="nav-link">Home</a>
-            <a href="#" class="nav-link">Profile</a>
-            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                @csrf
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
+        <div class="logo">
+            <img src="{{ asset('gambar/logo-ngawag.png') }}" alt="Logo NGAWAG">
         </div>
+        <ul class="nav-links">
+            <li><a href="{{ route('welcome') }}">Home</a></li>
+            <li><a href="{{ route('about') }}">Tentang</a></li>
+            
+            @auth
+                <!-- Menu yang hanya muncul jika user sudah login -->
+                <li><a href="{{ route('home') }}">Resort</a></li>
+                <li><a href="{{ route('profile') }}">My Profile</a></li>
+                <li>
+                    <a href="{{ route('logout') }}" 
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                </li>
+            @else
+                <!-- Menu untuk user yang belum login -->
+                <li><a href="{{ route('login') }}">Login</a></li>
+            @endauth
+        </ul>
     </nav>
+    
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Kamar dan Fasilitas Kami</h1>
+        <p>Temukan pengalaman menginap terbaik hanya di NGAWAG Resort.</p>
+    </div>
 
-    <div class="container">
-        <div class="welcome-section">
-            <h1>Selamat Datang, {{ Auth::user()->nama }}!</h1>
-        </div>
-
-        <div class="card-grid">
-            <div class="card">
-                <h3>Profil Mahasiswa</h3>
-                <p>NIM: {{ Auth::user()->nim }}</p>
-                <p>Nama: {{ Auth::user()->nama }}</p>
-                <p>Kelas: {{ Auth::user()->kelas }}</p>
-                <p>Email: {{ Auth::user()->email }}</p>
+    <!-- Room Categories -->
+    <div class="room-categories">
+        <h2>Kategori Kamar</h2>
+        <div class="categories">
+            <div class="category">
+                <img src="{{ asset('gambar/deluxe.jpg') }}" alt="Deluxe Room">
+                <h3>Deluxe Room</h3>
+                <p>Kamar mewah dengan pemandangan indah.</p>
             </div>
-
-            <div class="card">
-                <h3>Informasi Akademik</h3>
-                <p>Status: Aktif</p>
-                <p>Semester: 5</p>
-                <p>Program Studi: DIII Manajemen Informatika</p>
+            <div class="category">
+                <img src="{{ asset('gambar/vip.jpg') }}" alt="VIP Room">
+                <h3>VIP Room</h3>
+                <p>Kenyamanan ekstra dengan fasilitas eksklusif.</p>
             </div>
-
-            <div class="card">
-                <h3>Pengumuman Terbaru</h3>
-                <p>Belum ada pengumuman terbaru.</p>
+            <div class="category">
+                <img src="{{ asset('gambar/vvip.jpg') }}" alt="VVIP Room">
+                <h3>VVIP Room</h3>
+                <p>Pengalaman menginap paling mewah dan eksklusif.</p>
             </div>
         </div>
     </div>
+
+    <!-- Room List -->
+    <div class="room-list">
+        <h2>Daftar Kamar</h2>
+        <div class="rooms">
+            <!-- Room 1 -->
+            <div class="room">
+                <img src="{{ asset('gambar/kamar1.jpg') }}" alt="Kamar 1">
+                <h3>Deluxe Room 101</h3>
+                <p>Harga: Rp 1.000.000/malam</p>
+                <p>Kamar dengan pemandangan taman dan fasilitas lengkap.</p>
+                @if(Auth::check())
+                <a href="{{ route('booking', ['id' => 1]) }}" class="btn">Pesan Sekarang</a>
+                @else
+                <a href="{{ route('login') }}" class="btn">Login untuk Pesan</a>
+                @endif
+            </div>
+
+            <!-- Room 2 -->
+            <div class="room">
+                <img src="{{ asset('gambar/kamar2.jpg') }}" alt="Kamar 2">
+                <h3>VIP Room 201</h3>
+                <p>Harga: Rp 2.500.000/malam</p>
+                <p>Kamar luas dengan pemandangan laut dan layanan VIP.</p>
+                @if(Auth::check())
+                <a href="{{ route('booking', ['id' => 2]) }}" class="btn">Pesan Sekarang</a>
+                @else
+                <a href="{{ route('login') }}" class="btn">Login untuk Pesan</a>
+                @endif
+            </div>
+
+            <!-- Room 3 -->
+            <div class="room">
+                <img src="{{ asset('gambar/kamar3.jpg') }}" alt="Kamar 3">
+                <h3>VVIP Room 301</h3>
+                <p>Harga: Rp 5.000.000/malam</p>
+                <p>Kamar eksklusif dengan fasilitas pribadi dan layanan premium.</p>
+                @if(Auth::check())
+                <a href="{{ route('booking', ['id' => 3]) }}" class="btn">Pesan Sekarang</a>
+                @else
+                <a href="{{ route('login') }}" class="btn">Login untuk Pesan</a>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 NGAWAG Resort. All rights reserved.</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+    </footer>
 </body>
+
 </html>

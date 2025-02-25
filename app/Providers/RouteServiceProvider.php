@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
+
+    public const home = '/admin';
+
     /**
      * The path to your application's "home" route.
      *
